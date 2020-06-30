@@ -11,14 +11,16 @@
 	"license": "Apache-2.0",
 	"babel": {
 		"presets": [
-			["@babel/preset-env", {
-				"loose": true,
-				"modules": false,
-				"targets": "last 4 Electron versions"
-			}],
+			[
+				"@babel/preset-env",
+				{
+					"loose": true,
+					"modules": false,
+					"targets": "last 4 Electron versions"
+				}
+			],
 			"@babel/preset-typescript"
 		],
-
 		"plugins": [
 			"@babel/plugin-proposal-optional-chaining"
 		]
