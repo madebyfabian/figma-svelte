@@ -42,14 +42,17 @@ module.exports = ( env, argv ) => {
         // Svelte
         {
           test: /\.svelte$/,
-          use: {
-            loader: 'svelte-loader',
-            options: {
-              ...svelteConfig, 
-              emitCss: true,
-              hotReload: true
+          use: [
+            'babel-loader', 
+            {
+              loader: 'svelte-loader',
+              options: {
+                ...svelteConfig, 
+                emitCss: true,
+                hotReload: true
+              }
             }
-          }
+          ]
         },
         
         // JS and TS
@@ -129,6 +132,34 @@ module.exports = ( env, argv ) => {
       },
     ],  
   
-    stats: false
+    stats: false,
+
+    /**
+     * @see https://github.com/benwinding/svelte-template-webpack/blob/master/webpack.config.js
+     */
+    optimization: {
+      // create a separate chunk for webpack runtime
+      runtimeChunk: { name: 'runtime' },
+      splitChunks: {
+        chunks: 'all',
+        minSize: 0,
+        minChunks: 1,
+        automaticNameDelimiter: '_',
+        cacheGroups: {
+          vendors: false,
+          // node_modules thingies go to 'lib'
+          libs: {
+            test: /[\\/]node_modules[\\/]/,
+            priority: -10,
+          },
+          // Chunk that contains used polyfills
+          polyfills: {
+            test: /core-js/,
+            name: 'polyfills',
+            priority: 10,
+          },
+        },
+      },
+    },
   }
 }
